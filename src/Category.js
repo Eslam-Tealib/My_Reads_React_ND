@@ -2,7 +2,6 @@
 
 import React, {Component} from 'react';
 import ListBook from './ListBook';
-import { Link } from "react-router-dom";
 
 class Category extends Component {
     render() {

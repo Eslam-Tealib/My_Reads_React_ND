@@ -1,6 +1,7 @@
 // jshint esversion: 9
 
 import React, {Component} from 'react';
+import { Link } from "react-router-dom";
 
 class Book extends Component {
     render() {
@@ -16,6 +17,9 @@ class Book extends Component {
                         <option value="read">Read</option>
                         <option value="none">None</option>
                     </select>
+                    <Link
+                        to="/"
+                    />
                 </div>
                 </div>
                 <div className="book-title">{this.props.book.title}</div>

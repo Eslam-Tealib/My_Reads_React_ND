@@ -5,7 +5,7 @@ import * as BooksAPI from './BooksAPI';
 import './App.css';
 import Category from './Category';
 import Search from "./Search";
-import {Route} from "react-router-dom";
+import {Route, Link} from "react-router-dom";
 
 /*
 Steps:
@@ -82,14 +82,16 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <Search books={this.state.books} onMove={this.moveBookToShelf}/>
-        ) : (
-          <div className="list-books">
+
+        <Route exact path='/' render={() => (
+            <div className="list-books">
+
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
+            
             <div className="list-books-content">
+
               <div>
                 <Category
                   title="Currently Reading"
@@ -109,14 +111,27 @@ class BooksApp extends React.Component {
                   onMove={this.moveBookToShelf}
                 />
 
-                </div>
+              </div>
 
-                </div>
-            <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
             </div>
+
+            <Link 
+                to='/search'
+                className="open-search"
+              >Add a book
+            </Link>
+            
+            {/* <div className="open-search">
+              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+            </div> */}
           </div>
           )}
+        />
+        
+        <Route path='/search' render={() => (
+          <Search books={this.state.books} onMove={this.moveBookToShelf}/>
+        )}/>
+        
       </div>
     )
   }
