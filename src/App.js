@@ -50,17 +50,54 @@ class BooksApp extends React.Component {
   }
 
   moveBookToShelf = (book,toShelfName) => {
+
+    console.log("Book to update",book)
+    console.log("Dest. Shelf",toShelfName)
     //print before update
     console.log("Before update ",this.state.books)
     //find book 
+
     var updatedBooks = this.state.books
+    /*
+    //Example : [1,2] 2. update id 3
+     0. define var found = false
+     1. loop over available state array
+     2. if book id equals one of the existing state books id => 
+        - we change its shelf & found = true
+     3. end if
+        - end loop
+     
+     4.  if (!found)
+      - book.shelf = toSHelfName
+     5. updatedBooks.push(book)
+     end  if
+
+    */
+   var found = false
   
     updatedBooks.forEach((b) => {
       if(b.id === book.id) {
         //update book
         b.shelf = toShelfName
-      }
+        found = true
+      } 
     })
+    if(!found) {
+      book.shelf = toShelfName
+      updatedBooks.push(book)
+    }
+  
+    
+    //Steps
+    //////case 1: if the book is a shelf and we just wanna change its shelf
+    // b. we access it by id
+    // c. we change its shelf
+
+    //////case 2: if the book is not in any shelf
+    // d. add it to the array of books
+    // e. change its shelf to the specified shelf
+
+    
     console.log("After update ",updatedBooks)
 
     this.setState((currentState) => ({
