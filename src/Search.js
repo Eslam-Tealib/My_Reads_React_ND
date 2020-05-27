@@ -1,4 +1,3 @@
-// jshint esversion: 9
 
 import React, {Component} from 'react';
 import ListBook from './ListBook';
@@ -9,53 +8,67 @@ class Search extends Component {
     state = {
         query: '',
         searchResult: []
-      }
+    }
     
-      updateQuery = query => {
-        this.setState(() => ({
-          query: query.trim()
-        }))
+    updateQuery = query => {
+    this.setState(() => ({
+        query: query
+    }))
 
-        BooksAPI.search(query).then((results) => {
 
-            console.log("Result",results)
-            const destructed = results.map((result) => {
-                const {authors, title, shelf, id, imageLinks} = result;
-                var authorString = "";
-                console.log("Authors",authors)
-                if(authors) {
-                    authorString = authors.join(",");
-                } 
-                 // console.log(authorString);
-       
-                return {authors: authorString, title, shelf, id, thumbnail: imageLinks.thumbnail};
-             });
-       
-             this.setState(prevState => ({
-               searchResult: destructed
-             }));
+    if (query.trim().length > 0) {
+
+        BooksAPI.search(query.trim()).then((results) => {
+            if(results === undefined){
+
+                this.setState(prevState => ({
+                    searchResult: []
+                }))
+                return 
+            }
+
+            if(results.error){
+                // console.log("Request Sucess but Error exists : ",results.error)
+                return 
+            }
+
+            var destructed = results.map((result) => {
+            const {authors = [], title, shelf, id, imageLinks = {}} = result;
+    
+            return {authors: authors.join(","), title, shelf, id, thumbnail: imageLinks.thumbnail};
+            });
+        
+            destructed = destructed.map((book) => {
+            book.shelf =  this.props.bookShelfName(book)
+            return book
+            });
+
+            this.setState(prevState => ({
+            searchResult: destructed
+            }));
+                
             
         }).catch(() => {
-            console.log("Error")
+            // console.log("Error")
         })
-
-
-      }
+        }
+    }
     
-      clearQuery = () => {
+
+    clearQuery = () => {
         this.updateQuery('');
-      }
-    
+    }
+
     render() {
         const {query} = this.state;
-        const {onMove} = this.props;
-         
-        const showingBooks = query === ''
+        
+        var showingBooks = query === ''
         ? []
         : this.state.searchResult.filter((c) => (
         c.title.toLowerCase().includes(query.toLowerCase())
         ));
-       
+
+
         return(
             <div className="search-books">
                 <div className="search-books-bar">
@@ -65,16 +78,8 @@ class Search extends Component {
                 > Close
                 </Link>
 
-                {/* <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button> */}
                     <div className="search-books-input-wrapper">
-                        {/*
-                        NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                        You can find these search terms here:
-                        https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                        However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                        you don't find a specific author or title. Every search is limited by search terms.
-                        */}
+                        
                         <input 
                             type="text" 
                             placeholder="Search by title or author"

@@ -1,25 +1,18 @@
-// jshint esversion: 9
 
-import React, {Component} from 'react';
+import React from 'react';
 import Book from './Book';
 
-class ListBook extends Component {
-    
-    render() {
-         
-        
-      
-        return(
-            <div className="bookshelf-books">
-                <ol className="books-grid">
-                    {this.props.books.map(book => (
-                        <Book key={book.id} id={book.id} book={book} onMove={this.props.onMove}/>
-                    ))}
-                    
-                </ol>
-            </div>
-        )
-    }
+function ListBook (props) {
+    return(
+        <div className="bookshelf-books">
+            <ol className="books-grid">
+                {props.books.map(book => (
+                    <Book key={book.id} id={book.id} book={book} onMove={props.onMove}/>
+                ))}
+                
+            </ol>
+        </div>
+    )
 }
 
 export default ListBook;
